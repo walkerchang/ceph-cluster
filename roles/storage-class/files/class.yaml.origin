@@ -1,7 +1,7 @@
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: rbd
+  name: default
 provisioner: ceph.com/rbd  # must match with created provisioner name
 parameters: 
   monitors: YOUR_MONITOR_IP:6789

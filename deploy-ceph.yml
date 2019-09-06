@@ -7,7 +7,7 @@
       blockinfile:
         path: /etc/hosts
         block: |-
-          {% for item in (groups['k8s-cluster'] + groups['etcd'] + groups['calico-rr']|default([]))|unique -%}
+          {% for item in (groups['ceph-mon'] + groups['ceph-osd']|default([]))|unique -%}
           {% if 'access_ip' in hostvars[item] or 'ip' in hostvars[item] != "skip" -%}
           {{ hostvars[item]['access_ip'] | default(hostvars[item]['ip'])}}
           {%- if ('ansible_hostname' in hostvars[item] and item != hostvars[item]['ansible_hostname']) %} {{ hostvars[item]['ansible_hostname'] }} {{ hostvars[item]['ansible_hostname'] }}{% endif %} {{ item }}

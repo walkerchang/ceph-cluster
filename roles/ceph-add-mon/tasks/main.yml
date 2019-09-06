@@ -13,7 +13,7 @@
     executable: /bin/bash
 
 - name: change origin ceph.conf
-  shell: {{ CEPH_WORKSPACE }}/scripts/replace-ceph-conf.sh
+  shell: "{{ CEPH_WORKSPACE }}/scripts/replace-ceph-conf.sh"
   args:
     chdir: /home/ubuntu
     executable: /bin/bash

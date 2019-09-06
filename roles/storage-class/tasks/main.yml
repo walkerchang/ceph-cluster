@@ -16,7 +16,7 @@
 - name: install storage class
   shell: '{{item}}'
   args:
-    chdir: {{CEPH_WORKSPACE}}/roles/storage-class/files
+    chdir: "{{ CEPH_WORKSPACE }}/roles/storage-class/files"
     executable: /bin/bash
   ignore_errors: True    
   with_items:

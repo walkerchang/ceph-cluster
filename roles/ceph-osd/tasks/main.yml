@@ -9,7 +9,7 @@
     - ceph-osd
 
 - name: create osd 
-  shell: {{CEPH_WORKSPACE}}/scripts/create-osd.sh
+  shell: "{{ CEPH_WORKSPACE }}/scripts/create-osd.sh"
   args:
     chdir: /home/ubuntu
     executable: /bin/bash
