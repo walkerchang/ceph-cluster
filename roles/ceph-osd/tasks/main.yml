@@ -1,0 +1,22 @@
+
+---
+- name: show all the hosts matching the pattern
+  shell: echo "{{ item }}" >> /home/ubuntu/ceph-osd-hosts
+  args:
+    chdir: /home/ubuntu
+    executable: /bin/bash
+  with_inventory_hostnames:
+    - ceph-osd
+
+- name: create osd 
+  shell: {{CEPH_WORKSPACE}}/scripts/create-osd.sh
+  args:
+    chdir: /home/ubuntu
+    executable: /bin/bash
+  ignore_errors: True
+
+- name: Clean file
+  file:
+    state: absent
+    path: "/home/ubuntu/ceph-osd-hosts"
+  

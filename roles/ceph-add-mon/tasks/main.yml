@@ -1,0 +1,54 @@
+- name: show all the hosts matching the pattern
+  shell: echo "{{ item }}" >> /home/ubuntu/ceph-mon-hosts
+  args:
+    chdir: /home/ubuntu
+    executable: /bin/bash
+  with_inventory_hostnames:
+    - ceph-mon
+
+- name: create ceph cluster
+  shell: ceph-deploy new `cat /home/ubuntu/ceph-mon-hosts | xargs`
+  args:
+    chdir: /tmp
+    executable: /bin/bash
+
+- name: change origin ceph.conf
+  shell: {{ CEPH_WORKSPACE }}/scripts/replace-ceph-conf.sh
+  args:
+    chdir: /home/ubuntu
+    executable: /bin/bash
+
+- name: install ceph packages
+  shell: ceph-deploy install --release mimic `cat /home/ubuntu/ceph-mon-hosts | xargs`
+  args:
+    chdir: /home/ubuntu
+    executable: /bin/bash
+    
+- name: deploy ceph initial monitors 
+  shell: '{{item}}'
+  args:
+    chdir: /home/ubuntu
+    executable: /bin/bash
+  with_items:
+    - ceph-deploy --overwrite-conf mon create `cat /home/ubuntu/ceph-mon-hosts | xargs`      
+ 
+- name: gather the keys and deploy mgr
+  shell: '{{item}}'
+  args:
+    chdir: /home/ubuntu
+    executable: /bin/bash
+  with_items:
+    - ceph-deploy admin `cat /home/ubuntu/ceph-mon-hosts | xargs`
+    - ceph-deploy mgr create `cat /home/ubuntu/ceph-mon-hosts | xargs`
+
+- name: Clean tmp ceph config
+  file:
+    state: absent
+    path: "/tmp/ceph.conf"
+    
+- name: Clean file
+  file:
+    state: absent
+    path: "/home/ubuntu/ceph-mon-hosts"
+
+    

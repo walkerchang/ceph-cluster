@@ -1,0 +1,31 @@
+---
+- hosts: localhost
+  gather_facts: false
+  become: no
+  tasks:
+    - name: Hosts | populate inventory into hosts file
+      blockinfile:
+        path: /etc/hosts
+        block: |-
+          {% for item in (groups['k8s-cluster'] + groups['etcd'] + groups['calico-rr']|default([]))|unique -%}
+          {% if 'access_ip' in hostvars[item] or 'ip' in hostvars[item] != "skip" -%}
+          {{ hostvars[item]['access_ip'] | default(hostvars[item]['ip'])}}
+          {%- if ('ansible_hostname' in hostvars[item] and item != hostvars[item]['ansible_hostname']) %} {{ hostvars[item]['ansible_hostname'] }} {{ hostvars[item]['ansible_hostname'] }}{% endif %} {{ item }}
+          {% endif %}
+          {% endfor %}
+        state: present
+        create: yes
+        backup: yes
+        unsafe_writes: yes
+        marker: "# Ansible inventory hosts {mark}"
+  vars:
+    ansible_connection: local
+
+- hosts: localhost
+  gather_facts: false
+  become: no
+  roles:
+    - ceph-add-mon
+    - ceph-osd
+    - modify-k8s-pods
+

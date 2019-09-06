@@ -1,0 +1,47 @@
+---
+- name: resize pool kube size
+  shell: '{{item}}'
+  args:
+    chdir: /etc/ceph
+    executable: /bin/bash
+  vars:
+    HOST_COUNT: "{{ groups['ceph-mon'] | length }}"
+  with_items:
+    - sudo ceph osd pool set kube size {{HOST_COUNT}}
+
+- name: apt update kube controller manager
+  shell: kubectl exec -it -n kube-system kube-controller-manager-{{ item }} -- apt-get update
+  args:
+    chdir: "{{ kubectl_dir }}"
+    executable: /bin/bash
+  ignore_errors: True
+  with_inventory_hostnames:
+    - kube-master
+
+- name: install ceph-common on kube controller manager
+  shell: kubectl exec -it -n kube-system kube-controller-manager-{{ item }} -- apt-get install ceph-common -y
+  args:
+    chdir: "{{ kubectl_dir }}"
+    executable: /bin/bash
+  ignore_errors: True
+  with_inventory_hostnames:
+    - kube-master
+
+- name: copy ceph config to kube controller manager
+  shell: kubectl cp /home/ubuntu/ceph.conf kube-system/kube-controller-manager-{{ item }}:/etc/ceph/
+  args:
+    chdir: "{{ kubectl_dir }}"
+    executable: /bin/bash
+  ignore_errors: True
+  with_inventory_hostnames:
+    - kube-master
+
+- name: copy ceph client admin keyring to kube controller manager
+  shell: kubectl cp /home/ubuntu/ceph.client.admin.keyring kube-system/kube-controller-manager-{{ item }}:/etc/ceph/
+  args:
+    chdir: "{{ kubectl_dir }}"
+    executable: /bin/bash
+  ignore_errors: True
+  with_inventory_hostnames:
+    - kube-master
+

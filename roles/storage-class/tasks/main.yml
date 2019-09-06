@@ -1,0 +1,35 @@
+---
+- name: create pool
+  shell: '{{item}}'
+  args:
+    chdir: /etc/ceph
+    executable: /bin/bash
+  vars:  
+    HOST_COUNT: "{{ groups['ceph-osd'] | length }}"          
+  with_items:
+    - cp /home/ubuntu/ceph.conf /etc/ceph/
+    - cp /home/ubuntu/ceph.client.admin.keyring /etc/ceph/
+    - sudo ceph osd pool create kube 250
+    - sudo rbd pool init kube
+    - sudo ceph auth add client.kube mon 'allow r' osd 'allow rwx pool=kube'
+
+- name: install storage class
+  shell: '{{item}}'
+  args:
+    chdir: {{CEPH_WORKSPACE}}/roles/storage-class/files
+    executable: /bin/bash
+  ignore_errors: True    
+  with_items:
+    - cp admin-secret.yaml.origin admin-secret.yaml
+    - cp kube-secret.yaml.origin kube-secret.yaml
+    - cp class.yaml.origin class.yaml      
+    - ./change-monitors.sh
+    - ./change-secret.sh  
+    - kubectl create -f service-account.yaml
+    - kubectl create -f role.yaml
+    - kubectl create -f cluster-role.yaml
+    - kubectl create -f admin-secret.yaml
+    - kubectl create -f kube-secret.yaml
+    - kubectl create -f provisioner.yaml
+    - kubectl create -f class.yaml  
+

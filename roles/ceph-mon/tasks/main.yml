@@ -1,0 +1,49 @@
+- name: show all the hosts matching the pattern
+  shell: echo "{{ item }}" >> /home/ubuntu/ceph-mon-hosts
+  args:
+    chdir: /home/ubuntu
+    executable: /bin/bash
+  with_inventory_hostnames:
+    - ceph-mon
+
+- name: create ceph cluster
+  shell: ceph-deploy new `cat /home/ubuntu/ceph-mon-hosts | xargs`
+  args:
+    chdir: /home/ubuntu
+    executable: /bin/bash
+
+- name: echo public network in ceph.conf
+  shell: echo public_network = {{ceph_public_network}} >> ceph.conf
+  args:
+    chdir: /home/ubuntu
+    executable: /bin/bash
+
+- name: install ceph packages
+  shell: ceph-deploy install `cat /home/ubuntu/ceph-mon-hosts | xargs`
+  args:
+    chdir: /home/ubuntu
+    executable: /bin/bash
+    
+- name: deploy ceph initial monitors 
+  shell: '{{item}}'
+  args:
+    chdir: /home/ubuntu
+    executable: /bin/bash
+  with_items:
+    - ceph-deploy mon create `cat /home/ubuntu/ceph-mon-hosts | xargs`      
+ 
+- name: gather the keys and deploy mgr
+  shell: '{{item}}'
+  args:
+    chdir: /home/ubuntu
+    executable: /bin/bash
+  with_items:
+    - ceph-deploy gatherkeys `cat /home/ubuntu/ceph-mon-hosts | xargs`
+    - ceph-deploy admin `cat /home/ubuntu/ceph-mon-hosts | xargs`
+    - ceph-deploy mgr create `cat /home/ubuntu/ceph-mon-hosts | xargs`
+
+- name: Clean file
+  file:
+    state: absent
+    path: "/home/ubuntu/ceph-mon-hosts"
+

@@ -1,0 +1,11 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: rbd-claim  # whatever you want 
+spec: 
+  storageClassName: rbd  # created StorageClass name 
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 120Mi  # you have to determine the size with 

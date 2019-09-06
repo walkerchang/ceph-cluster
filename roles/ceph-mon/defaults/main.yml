@@ -1,0 +1,2 @@
+---
+ceph_public_network: 172.22.23.0/24

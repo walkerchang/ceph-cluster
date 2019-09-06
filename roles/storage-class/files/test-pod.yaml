@@ -1,0 +1,18 @@
+kind: Pod
+apiVersion: v1
+metadata: 
+  name: test-pod
+spec:
+  containers:
+    - name: test-pod
+      image: nginx
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: ceph-rbd
+          mountPath: /ceph
+          readOnly: false
+  volumes:
+    - name: ceph-rbd
+      persistentVolumeClaim:
+        claimName: rbd-claim  # exactly same as claimed 
