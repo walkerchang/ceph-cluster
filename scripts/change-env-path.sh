@@ -1,8 +1,9 @@
 #!/bin/bash
 
 ## change k8s and ceph env path
-CEPH_WORKSPACE=/home/ubuntu/ceph-cluster
-KUBESPRAY_WORKSPACE=/home/ubuntu/kubespray
+CEPH_WORKSPACE=$1
+KUBESPRAY_WORKSPACE=$2
+KUBESPRAY_ENV=$3
 
 cd $CEPH_WORKSPACE
 
@@ -35,6 +36,7 @@ all_k8s_files=(
 for file in ${all_k8s_files[@]}
 do
     sed -i "s%/home/ubuntu/kubespray%$KUBESPRAY_WORKSPACE%" $file
+    sed -i "s%demo%$KUBESPRAY_ENV%" $file
 done
 
 
