@@ -32,4 +32,5 @@
     - kubectl create -f kube-secret.yaml
     - kubectl create -f provisioner.yaml
     - kubectl create -f class.yaml  
+    - "kubectl patch storageclass default -p '{\"metadata\": {\"annotations\":{\"storageclass.kubernetes.io/is-default-class\":\"true\"}}}'"
 
