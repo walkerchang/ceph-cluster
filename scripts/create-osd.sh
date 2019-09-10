@@ -1,5 +1,5 @@
 #!/bin/bash
-TARGET_WORKSPACE=/home/ubuntu/ceph-cluster/roles/ceph-osd/files
+TARGET_WORKSPACE=YOUR-CEPH-PATH/roles/ceph-osd/files
 TARGET_MANIFEST=$TARGET_WORKSPACE/ceph-osd.yml
 FILENAME=/home/ubuntu/ceph-osd-hosts
 CEPH_FILE_PATH=/home/ubuntu

@@ -1,1 +1,1 @@
-kubectl_dir: /home/ubuntu/kubespray/inventory/demo/artifacts
+kubectl_dir: YOUR-K8S-PATH/inventory/YOUR-K8S-ENV/artifacts

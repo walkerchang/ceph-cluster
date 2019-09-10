@@ -25,7 +25,7 @@ all_sh_files=(
 
 for file in ${all_sh_files[@]}
 do
-    sed -i "s%/home/ubuntu/ceph-cluster%$CEPH_WORKSPACE%" $file
+    sed -i "s%YOUR-CEPH-PATH%$CEPH_WORKSPACE%" $file
 done
 
 all_k8s_files=(
@@ -35,8 +35,8 @@ all_k8s_files=(
 
 for file in ${all_k8s_files[@]}
 do
-    sed -i "s%/home/ubuntu/kubespray%$KUBESPRAY_WORKSPACE%" $file
-    sed -i "s%demo%$KUBESPRAY_ENV%" $file
+    sed -i "s%YOUR-K8S-PATH%$KUBESPRAY_WORKSPACE%" $file
+    sed -i "s%YOUR-K8S-ENV%$KUBESPRAY_ENV%" $file
 done
 
 

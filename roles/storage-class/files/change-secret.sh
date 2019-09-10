@@ -1,5 +1,5 @@
 #!/bin/bash
-FILE_PATH=/home/ubuntu/ceph-cluster/roles/storage-class/files
+FILE_PATH=YOUR-CEPH-PATH/roles/storage-class/files
 ADMIN_FILE=$FILE_PATH/admin-secret.yaml
 CLIENT_FILE=$FILE_PATH/kube-secret.yaml
 
