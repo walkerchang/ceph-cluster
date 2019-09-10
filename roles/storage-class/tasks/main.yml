@@ -22,7 +22,8 @@
   with_items:
     - cp admin-secret.yaml.origin admin-secret.yaml
     - cp kube-secret.yaml.origin kube-secret.yaml
-    - cp class.yaml.origin class.yaml      
+    - cp class.yaml-ext4.origin class-ext4.yaml      
+    - cp class.yaml-xfs.origin class-xfs.yaml      
     - ./change-monitors.sh
     - ./change-secret.sh  
     - kubectl create -f service-account.yaml
@@ -31,6 +32,7 @@
     - kubectl create -f admin-secret.yaml
     - kubectl create -f kube-secret.yaml
     - kubectl create -f provisioner.yaml
-    - kubectl create -f class.yaml  
+    - kubectl create -f class-ext4.yaml
+    - kubectl create -f class-xfs.yaml  
     - "kubectl patch storageclass default -p '{\"metadata\": {\"annotations\":{\"storageclass.kubernetes.io/is-default-class\":\"true\"}}}'"
 
