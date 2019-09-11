@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  gather_facts: false
+  become: no
+  roles:
+    - storage-class
+    - modify-k8s-pods
+
+          

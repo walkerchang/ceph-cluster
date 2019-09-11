@@ -29,7 +29,6 @@
     - ceph-osd
 
 - hosts: ceph-osd[0] 
-  name: copy file to ceph-osd nodes
   gather_facts: false
   tasks:
     - name: fix ceph issue 
@@ -38,11 +37,3 @@
         chdir: /home/ubuntu
         executable: /bin/bash
 
-- hosts: localhost
-  gather_facts: false
-  become: no
-  roles:
-    - storage-class
-    - modify-k8s-pods
-
-          
