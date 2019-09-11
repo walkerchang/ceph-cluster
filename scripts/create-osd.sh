@@ -9,7 +9,7 @@ cd $CEPH_FILE_PATH
 
 ## 抓取要做 ceph osd 的 devices 
 CEPH_DISK_DEVICE=`grep -n "CEPH_DISK_DEVICE" $TARGET_WORKSPACE/ceph-osd.yml | awk -F':' '{print $3}'`
-str=`echo $CEPH_DISK_DEVICE | sed "s/\[/\"/g" | sed "s/\]/\"/g" | sed 's/"//g'`
+str=`echo $CEPH_DISK_DEVICE | sed "s/\[/\"/g" | sed "s/\]/\"/g" | sed 's/"//g' | sed "s/'//g" `
 
 ## 轉換成 array
 OLD_IFS="$IFS" 
