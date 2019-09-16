@@ -31,7 +31,10 @@
     executable: /bin/bash
   with_items:
     - ceph-deploy mon create `cat /home/ubuntu/ceph-mon-hosts | xargs`      
- 
+
+- pause:
+    minutes: 2
+      
 - name: gather the keys and deploy mgr
   shell: '{{item}}'
   args:
@@ -41,6 +44,8 @@
     - ceph-deploy gatherkeys `cat /home/ubuntu/ceph-mon-hosts | xargs`
     - ceph-deploy admin `cat /home/ubuntu/ceph-mon-hosts | xargs`
     - ceph-deploy mgr create `cat /home/ubuntu/ceph-mon-hosts | xargs`
+    - cp ceph.conf /etc/ceph/
+    - cp ceph.client.admin.keyring /etc/ceph/  
 
 - name: Clean file
   file:
